@@ -108,16 +108,16 @@ def lender_data():
     return render_template("lender_data.html", lenders_data=lender_data)
 
 
-@app.route("/pagination/<int:page>")
-def pagination(page):
-    per_page = 10  # Number of items per page
-    paginated_data = LenderForm.query.paginate(page, per_page, False)
-    return render_template("paginated_cards.html", paginated_data=paginated_data)
+# @app.route("/pagination/<int:page>")
+# def pagination(page):
+#     per_page = 10  # Number of items per page
+#     paginated_data = LenderForm.query.paginate(page, per_page, False)
+#     return render_template("paginated_cards.html", paginated_data=paginated_data)
 
-@app.route("/details/<int:id>")
-def details(id):
-    item = LenderForm.query.get_or_404(id)
-    return render_template("details.html", item=item)
+# @app.route("/details/<int:id>")
+# def details(id):
+#     item = LenderForm.query.get_or_404(id)
+#     return render_template("details.html", item=item)
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():

@@ -4,37 +4,44 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    {% for item in paginated_data.items %}
-    <div class="col-md-4">
-      <div class="card mb-4 shadow-lg card-hover">
-        <img src="{{ item.image }}" class="card-img-top" alt="Dress Image">
-        <div class="card-body">
-          <h5 class="card-title">{{ item.fname }} {{ item.lname }}</h5>
-          <p class="card-text">{{ item.dress_info }}</p>
-          <a href="{{ url_for('details', id=item.id) }}" class="btn btn-primary">View Details</a>
+    {% for form_data in lenders_data %}
+    <div class="col-md-4 py-3 ">
+      <!-- <div class="card mb-4 shadow-lg card-hover">
+        {% if form_data.image_base64 %}
+        <img src="data:image/jpeg;base64,{{ form_data.image_base64 }}" class="card-img-top"  alt="Dress Image">
+        {% else %}
+        <p>No Image Available</p>
+        {% endif %} -->
+      <!-- <div class="card-body">
+          <h5 class="card-title">{{ form_data.fname }} {{ form_data.lname }}</h5>
+          <p class="card-text text-small">Phone: {{ form_data.phone }}</p>
+          <p class="card-text text-small">Email: {{ form_data.email }}</p>
+          <p class="card-text text-small">City: {{ form_data.lender_city }}</p>
+          <p class="card-text text-small">Dress Type: {{ form_data.Dres_type }}</p>
+          <p class="card-text text-small">Price: {{ form_data.price_of_a_dress }}</p>
+          <p class="card-text text-small">Brand: {{ form_data.Brand }}</p>
+          <p class="card-text text-small">Size: {{ form_data.Size }}</p>
+          <p class="card-text text-small">Date of Purchase: {{ form_data.date_of_purchase }}</p>
+          <p class="card-text text-small">Additional Info: {{ form_data.dress_info }}</p>
+        </div> -->
+      <div class="card" style="width: 18rem h-50 ;">
+        {% if form_data.image_base64 %}
+        <img src="data:image/jpeg;base64,{{ form_data.image_base64 }}" class="card-img-top" alt="Dress Image">
+        {% else %}
+        <p>No Image Available</p>
+        {% endif %}
+        <div class="card-body my-2 shadow-lg  ">
+          <h5 class="card-title">{{ form_data.Dres_type }}</h5>
+
+          <!-- <p class="card-text text-small">Price: {{ form_data.price_of_a_dress }}</p>
+          <p class="card-text text-small">Brand: {{ form_data.Brand }}</p> -->
+          <p class="card-text text-small text-truncate" style="max-width: 40ch;">{{ form_data.dress_info }}</p>
+          <a href="#" class="btn btn-primary">Details</a>
         </div>
       </div>
+      <!-- </div> -->
     </div>
     {% endfor %}
   </div>
-  
-  <!-- Pagination -->
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      {% if paginated_data.has_prev %}
-      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=1) }}">First</a></li>
-      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=paginated_data.prev_num) }}">Previous</a></li>
-      {% endif %}
-      {% for page_num in paginated_data.iter_pages() %}
-      <li class="page-item {% if page_num == paginated_data.page %}active{% endif %}">
-        <a class="page-link" href="{{ url_for('pagination', page=page_num) }}">{{ page_num }}</a>
-      </li>
-      {% endfor %}
-      {% if paginated_data.has_next %}
-      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=paginated_data.next_num) }}">Next</a></li>
-      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=paginated_data.pages) }}">Last</a></li>
-      {% endif %}
-    </ul>
-  </nav>
 </div>
 {% endblock %}
