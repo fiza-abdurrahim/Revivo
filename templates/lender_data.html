@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Lender Form Data{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    {% for item in paginated_data.items %}
+    <div class="col-md-4">
+      <div class="card mb-4 shadow-lg card-hover">
+        <img src="{{ item.image }}" class="card-img-top" alt="Dress Image">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.fname }} {{ item.lname }}</h5>
+          <p class="card-text">{{ item.dress_info }}</p>
+          <a href="{{ url_for('details', id=item.id) }}" class="btn btn-primary">View Details</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <!-- Pagination -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      {% if paginated_data.has_prev %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=1) }}">First</a></li>
+      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=paginated_data.prev_num) }}">Previous</a></li>
+      {% endif %}
+      {% for page_num in paginated_data.iter_pages() %}
+      <li class="page-item {% if page_num == paginated_data.page %}active{% endif %}">
+        <a class="page-link" href="{{ url_for('pagination', page=page_num) }}">{{ page_num }}</a>
+      </li>
+      {% endfor %}
+      {% if paginated_data.has_next %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=paginated_data.next_num) }}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="{{ url_for('pagination', page=paginated_data.pages) }}">Last</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}

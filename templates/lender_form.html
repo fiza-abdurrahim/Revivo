@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+<title>Revivo Premium Dress| Lender Form</title>
+{% block content %}
+<div class="container">
+  <header class="row m-t-50">
+    <div class="col-md-12 text-center">
+      <h2>Revivo</h2>
+    </div>
+  </header>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header" style="text-align: center">
+          <h5>Submit Your Dresses</h5>
+        </div>
+        <div class="card-body">
+          <h5>Welcome, Please fill the following fields</h5>
+
+          <hr />
+          <div id="error" class="text-danger"></div>
+          <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="lender_id" value="0" />
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="first_name">First Name</label>
+                <input type="text" name="fname" value="" id="first_name" class="form-control required"
+                  placeholder="First Name" required="required" />
+                <div class="invalid-feedback">Please enter First Name.</div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="lname" value="" id="last_name" class="form-control required"
+                  placeholder="Last Name" required="required" />
+                <div class="invalid-feedback">Please enter Last Name.</div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="contact_number">Contact Number</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend">+92</span>
+                  </div>
+                  <input type="text" name="phone" value="" id="contact_number" class="form-control required"
+                    placeholder="Contact Number" required="required" minlength="10" maxlength="10"
+                    pattern="[0-9]{10}" />
+                </div>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="email">Email Address <span>(Optional)</span></label>
+                <input type="email" name="email" value="" id="email" class="form-control" placeholder="Email Address" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="city">City</label>
+                <select name="lender_city" value="" id="city" class="form-control required city" placeholder="city"
+                  required="required">
+                  <option value="" disabled="" selected="">Chose City</option>
+                  <option value="Karachi">Karachi</option>
+                  <option value="Lahore">Lahore</option>
+                  <option value="Islamabad">Islamabad</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="Dres_type">Dress Type</label>
+                <select name="Dres_type" value="" id="Dres_type" class="form-control required" placeholder="city"
+                  required="required">
+                  <option value="" disabled="" selected="">Dress type</option>
+                  <option value="Bridal">Bridal</option>
+                  <option value="Formal">Formal</option>
+                  <option value="Mens Wear">Men's Wear</option>
+                  <option value="Both">Both (Bridal And Formal)</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6 other_city" style="display: none">
+                <label for="other_city">Other City</label>
+                <input type="text" name="other_lender_city" value="" id="other_city" class="form-control required"
+                  placeholder="Type other city name" />
+                <div class="invalid-feedback">Please enter Other City.</div>
+              </div>
+              <div class="form-group col-md-6 hidden_tab">
+                <label for="price_of_a_dress">Price of a dress</label>
+                <input type="number" name="price_of_a_dress" value="" id="price_of_a_dress"
+                  class="form-control required" placeholder="Price of a dress" />
+              </div>
+              <div class="form-group col-md-6 hidden_tab">
+                <label for="Brand">Brand</label>
+                <select name="Brand" value="" id="Brand" class="form-control required" placeholder="Brand">
+                  <option value="" disabled="" selected="">Select Brand</option>
+                  <option value="Self designed">Self designed</option>
+                  <option value="Local Brand">Local Brand</option>
+                  <option value="Designer (tagged)">Designer (tagged)</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6 hidden_tab">
+                <label for="Size">Size</label>
+                <select name="Size" value="" id="Size" class="form-control required" placeholder="Size">
+                  <option value="" disabled="" selected="">Select Size</option>
+                  <option value="XS (Chest up to 34 inch)">
+                    XS (Chest up to 34 inch)
+                  </option>
+                  <option value="S (Chest up to 36 inch)">
+                    S (Chest up to 36 inch)
+                  </option>
+                  <option value="L (Chest up to 40 inch)">
+                    L (Chest up to 40 inch)
+                  </option>
+                  <option value="XL (Chest 46+)">XL (Chest 46+)</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6 hidden_tab">
+                <label for="date_of_purchase">Date of purchase</label>
+                <input type="date" name="date_of_purchase" value="" id="date_of_purchase"
+                  class="form-control required" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <label>Any other details that you'd like to share:</label><br />
+                <textarea id="dress_info" name="dress_info" rows="4" class="form-control required"
+                  style="border: 1px solid #9d9da1; border-radius: 10px"></textarea>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                <p>Maximum file upload size 5MB.</p>
+                <input type="file" name="image" id="input-file-max-fs" multiple="" required="" class="dropify"
+                  data-max-file-size="5M" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-12" style="text-align: center">
+                <button type="submit" name="registration_form" class="btn btn-primary" data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop">
+                  Save
+                </button>
+
+                <a href="{{url_for('home')}}" class="btn btn-primary">Back</a>
+                <a href="#" id="loader" class="btn btn-info" style="display: none">Saving..</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- <script type="text/javascript">
+    $(function () {
+      $("#agree").click(function (e) {
+        if ($(this).prop("checked") == true)
+          $("#submit_btn").prop("disabled", false);
+        else $("#submit_btn").prop("disabled", true);
+      });
+    });
+  </script> -->
+</div>
+{%endblock%}

@@ -1,0 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.card-hover:hover {
+    transform: scale(1.05);
+    transition: transform 0.1s ease-in-out;
+  }
+  
+  .text-small {
+    font-size: 0.6rem;
+  }
+  

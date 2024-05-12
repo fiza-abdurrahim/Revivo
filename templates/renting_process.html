@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+<title>Revivo Premium Dress Rental Process</title>
+{% block content %}
+<div class="container p-3 my-5 shadow-lg border rounded p-3  ">
+    <h1 class="text-center ">Renting Process</h1>
+    <hr>
+    <!-- Step 1: Open the dress you like on our website -->
+    <div class="container p-3 ">
+        <h3>Step 1:</h3>
+        <p> Open the dress you like on our website</p>
+        <p class="text-end ">ہماری ویب سائٹ پر آپ کوئی پسندیدہ کپڑا کھولیں۔</p>
+    </div>
+
+    <!-- Step 2: Select your city and security deposit -->
+    <div class="container p-3">
+        <h3>Step 2:</h3>
+        <p> Select your city and security deposit</p>
+        <p class="text-end ">اپنے شہر کو منتخب کریں (جہاں آپ کو کپڑا درکار ہوگا)، کپڑے کی سکیورٹی جمع کرانے کی رقم دکھائی دیگی۔</p>
+    </div>
+
+    <!-- Step 3: Choose delivery date -->
+    <div class="container p-3">
+        <h3>Step 3:</h3>
+        <p> Choose delivery date</p>
+        <p class="text-end ">تاریخِ تحویل منتخب کریں ، جسے آپ کو درخواست کرنے کی ضرورت ہے۔ پِک اپ کی تاریخ خودکار منتخب کی جائے گی۔</p>
+    </div>
+
+    <!-- Step 4: Delivery and pickup dates -->
+    <div class="container p-3">
+        <h3>Step 4:</h3>
+        <p> Delivery and pickup dates</p>
+        <p class="text-end ">تاریخِ تحویل منتخب کریں ، جسے آپ کو درخواست کرنے کی ضرورت ہے۔ پِک اپ کی تاریخ خودکار منتخب کی جائے گی۔</p>
+    </div>
+
+    <!-- Step 5: Adjust fitting -->
+    <div class="container p-3">
+        <h3>Step 5:</h3>
+        <p> Adjust fitting</p>
+        <p class="text-end ">مناسب فٹ ہونے کو یقینی بنانے کے لیے وہ پیمائشیں شامل کرنا یقینی بنائیں جو آپ پہنتے ہیں، نہ کہ آپ کی اپنی
+            پیمائش۔
+        </p>
+    </div>
+
+    <!-- Step 6: Verify and rent -->
+    <div class="container p-3">
+        <h3>Step 6:</h3>
+        <p> Verify and rent</p>
+        <p class="text-end ">ایک بار جب آپ تمام تفصیلات کی تصدیق کر لیتے ہیں، "ابھی کرایہ پر لیں" یا "کارٹ میں شامل کریں" پر کلک کریں (اگر
+            آپ
+            مزید کپڑے کرائے پر لینا چاہتے ہیں)۔</p>
+    </div>
+
+    <!-- Step 7: Checkout -->
+    <div class="container p-3">
+        <h3>Step 7:</h3>
+        <p> Checkout</p>
+        <p class="text-end ">چیک آؤٹ پیج پر، اپنی مکمل معلومات درج کریں، اور کرایہ کی رقم اور سیکیورٹی ڈپازٹ ظاہر ہو جائے گا۔ آپ کو یا تو
+            کرایہ کی رقم ادا کرنے کی ضرورت ہے یا کرایہ اور سیکیورٹی ڈپازٹ کی رقم ادا کی جائے گی۔</p>
+    </div>
+
+    <!-- Step 8: Security deposit -->
+    <div class="container p-3">
+        <h3>Step 8:</h3>
+        <p> Security deposit</p>
+        <p class="text-end ">لباس کی فراہمی سے پہلے سیکیورٹی ڈپازٹ درکار ہے۔</p>
+    </div>
+
+    <!-- Step 9: Security deposit refund -->
+    <div class="container p-3">
+        <h3>Step 9:</h3>
+        <p> Security deposit refund</p>
+        <p class="text-end ">لباس کے واپس ہونے کے بعد، سیکیورٹی ڈپازٹ نقد رقم میں واپس کر دیا جائے گا (اگر ہمارے آؤٹ لیٹ پر ذاتی طور پر
+            دیا
+            گیا ہو) یا کورئیر یا الماری کے سوار کے ذریعے بھیجے جانے پر کرایہ دار کے اکاؤنٹ میں منتقل کر دیا جائے گا۔</p>
+    </div>
+
+    <!-- Step 10: Delivery outside Karachi and Lahore -->
+    <div class="container p-3">
+        <h3>Step 10:</h3>
+        <p> Delivery outside Karachi and Lahore</p>
+        <p class="text-end ">فی الحال، Closet کراچی اور لاہور میں کپڑے نہیں پہنچاتی۔ ا
+        </p>
+    </div>
+    <button class="btn btn-primary my-2 align-self-center shadow-lg  "><a href="{{url_for('home')}}" class="text-white ">Back</a></button>
+</div>
+{%endblock%}
