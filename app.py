@@ -91,7 +91,8 @@ def lender_form():
         db.session.commit()
 
         # Redirect to a thank you page or home page
-        return redirect(url_for("thank_you"))
+        # return redirect(url_for("thank_you"))
+        return render_template("lender_form.html", show_modal=True)
     else:
         return render_template("lender_form.html")
     
@@ -108,20 +109,53 @@ def lender_data():
     return render_template("lender_data.html", lenders_data=lender_data)
 
 
-# @app.route("/pagination/<int:page>")
-# def pagination(page):
-#     per_page = 10  # Number of items per page
-#     paginated_data = LenderForm.query.paginate(page, per_page, False)
-#     return render_template("paginated_cards.html", paginated_data=paginated_data)
+@app.route("/mahndi_dresses")
+def mahndi_dresses():
+    # Query the database to fetch dresses with type "Mahndi"
+    mahndi_dresses = LenderForm.query.filter_by(Dres_type="Mahndi").all()
+    
+    # Iterate through each dress object to encode its image to base64
+    for dress in mahndi_dresses:
+        dress.image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+    
+    return render_template("mahndi_dresses.html", mahndi_dresses=mahndi_dresses)
 
-# @app.route("/details/<int:id>")
-# def details(id):
-#     item = LenderForm.query.get_or_404(id)
-#     return render_template("details.html", item=item)
+@app.route("/valima_dresses")
+def valima_dresses():
+    # Query the database to fetch dresses with type "Valima"
+    valima_dresses = LenderForm.query.filter_by(Dres_type="Valima").all()
+    
+    # Iterate through each dress object to encode its image to base64
+    for dress in valima_dresses:
+        dress.image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+    
+    return render_template("valima_dresses.html", valima_dresses=valima_dresses)
+@app.route("/nikkah_dresses")
+def nikkah_dresses():
+    # Query the database to fetch dresses with type "Nikkah"
+    nikkah_dresses = LenderForm.query.filter_by(Dres_type="Nikkah").all()
+    
+    # Iterate through each dress object to encode its image to base64
+    for dress in nikkah_dresses:
+        dress.image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+    
+    return render_template("Nikkah.html", Nikkah_dresses=nikkah_dresses)
+
+@app.route("/baraat_dresses")
+def baraat_dresses():
+    # Query the database to fetch dresses with type "Baraat"
+    baraat_dresses = LenderForm.query.filter_by(Dres_type="Baraat").all()
+    
+    # Iterate through each dress object to encode its image to base64
+    for dress in baraat_dresses:
+        dress.image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+    
+    return render_template("Baraat_dresses.html", Baraat_dresses=baraat_dresses)
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
+        
         # Retrieve form data
         name = request.form.get("name")
         email = request.form.get("email")
