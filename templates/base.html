@@ -72,15 +72,15 @@
               Formal
             </a>
             <ul class="dropdown-menu shadow-lg ">
-              <li><a class="dropdown-item" href="#">All</a></li>
-              <li><a class="dropdown-item" href="#">Sarees</a></li>
-              <li><a class="dropdown-item" href="#">Gharara </a></li>
-              <li><a class="dropdown-item" href="#">Lehngas </a></li>
+              
+              <li><a class="dropdown-item" href="{{url_for('sarees')}}">Sarees</a></li>
+              <li><a class="dropdown-item" href="{{url_for('gharas')}}">Gharas </a></li>
+              <li><a class="dropdown-item" href="{{url_for('lehnga')}}">Lehngas </a></li>
 
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="{{url_for('lender_data')}}">Other</a></li>
+              <li><a class="dropdown-item" href="{{url_for('other_dresses')}}">Other</a></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -100,6 +100,24 @@
       </div>
     </div>
   </nav>
+
+  <!-- flashing, alerts section -->
+  <div class="container mt-4">
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      {% for message in messages %}
+      <p class="mb-0">{{ message }}</p>
+      {% endfor %}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %} {% endwith %}
+  </div>
+
   <div id="content" class="container ">{% block content %}{% endblock %}</div>
 
   <footer class="footer bg-dark text-white p-3 mt-lg-5 ">

@@ -1,10 +1,21 @@
 import base64
-from flask import Flask, render_template, request,redirect, url_for
+import datetime
+import hmac
+import hashlib
+
+from flask import Flask, render_template, request,redirect, url_for, flash, get_flashed_messages, abort
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/revivo_db'
+app.config['SECRET_KEY'] = 'Fiza_Ashfaq_09'
 
+
+# Configuration
+JAZZCASH_MERCHANT_ID = "<JAZZCASH_MERCHANT_ID>"
+JAZZCASH_PASSWORD = "<JAZZCASH_PASSWORD>"
+JAZZCASH_RETURN_URL = "<JAZZCASH_RETURN_URL>"
+JAZZCASH_INTEGRITY_SALT = "<JAZZCASH_INTEGRITY_SALT>"
 
 db = SQLAlchemy(app)
 
@@ -40,6 +51,63 @@ class Feedback(db.Model):
 @app.route("/")
 def index():
     return render_template('home.html')
+
+# Payment route
+@app.route('/checkout')
+def checkout():
+    product_id = request.args.get('product_id')
+    product_name = request.args.get('product_name')
+    product_price = request.args.get('product_price')
+    # print(product_price, product_name)
+    
+    if product_price is None:
+        return "Product price not provided", 400
+
+    try:
+        pp_Amount = int(float(product_price) * 100)  # Convert to paisas (1 PKR = 100 paisas)
+    except ValueError:
+        return "Invalid product price", 400
+
+    current_datetime = datetime.datetime.now()
+    pp_TxnDateTime = current_datetime.strftime('%Y%m%d%H%M%S')
+    expiry_datetime = current_datetime + datetime.timedelta(hours=1)
+    pp_TxnExpiryDateTime = expiry_datetime.strftime('%Y%m%d%H%M%S')
+    pp_TxnRefNo = 'T' + pp_TxnDateTime
+
+    post_data = {
+        "pp_Version": "1.0",
+        "pp_TxnType": "",
+        "pp_Language": "EN",
+        "pp_MerchantID": JAZZCASH_MERCHANT_ID,
+        "pp_SubMerchantID": "",
+        "pp_Password": JAZZCASH_PASSWORD,
+        "pp_BankID": "TBANK",
+        "pp_ProductID": "RETL",
+        "pp_TxnRefNo": pp_TxnRefNo,
+        "pp_Amount": pp_Amount,
+        "pp_TxnCurrency": "PKR",
+        "pp_TxnDateTime": pp_TxnDateTime,
+        "pp_BillReference": "billRef",
+        "pp_Description": "Description of transaction",
+        "pp_TxnExpiryDateTime": pp_TxnExpiryDateTime,
+        "pp_ReturnURL": JAZZCASH_RETURN_URL,
+        "pp_SecureHash": "",
+        "ppmpf_1": "1",
+        "ppmpf_2": "2",
+        "ppmpf_3": "3",
+        "ppmpf_4": "4",
+        "ppmpf_5": "5"
+    }
+
+    sorted_string = '&'.join(f"{key}={value}" for key, value in sorted(post_data.items()) if value != "")
+    pp_SecureHash = hmac.new(
+        JAZZCASH_INTEGRITY_SALT.encode(),
+        sorted_string.encode(),
+        hashlib.sha256
+    ).hexdigest()
+    post_data['pp_SecureHash'] = pp_SecureHash
+
+    return render_template('checkout.html', product_name=product_name, product_price=product_price, post_data=post_data)
 
 @app.route("/home")
 def home():
@@ -92,7 +160,8 @@ def lender_form():
 
         # Redirect to a thank you page or home page
         # return redirect(url_for("thank_you"))
-        return render_template("lender_form.html", show_modal=True)
+        flash('Your Data has been successully inserted.')
+        return render_template("lender_form.html")
     else:
         return render_template("lender_form.html")
     
@@ -152,6 +221,54 @@ def baraat_dresses():
     
     return render_template("Baraat_dresses.html", Baraat_dresses=baraat_dresses)
 
+# formal routes
+@app.route("/sarees")
+def sarees():
+    Sarees_dress=LenderForm.query.filter_by(Dres_type="Saree").all()
+    for dress in Sarees_dress:
+        dress.image_base64=base64.b64encode(dress.image).decode('utf-8') if dress.image else None   
+    return render_template('sarees.html', Sarees_dress=Sarees_dress)
+
+@app.route("/lehnga")
+def lehnga():
+    lehnga_dreses= LenderForm.query.filter_by(Dres_type="Lehnga").all()
+    for dress in lehnga_dreses:
+        dress.image_base64=base64.b64encode(dress.image).decode('utf-8') if dress.image else None   
+    return render_template('Lehnga.html', Lehnga_dresses=lehnga_dreses)
+@app.route("/gharas")
+def gharas():
+     # Query the database to fetch dresses with type "Gharas"
+    gharas_dresses = LenderForm.query.filter_by(Dres_type="Gharas").all()
+    
+    # Iterate through each dress object to encode its image to base64
+    for dress in gharas_dresses:
+        dress.image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+    return render_template('gharas.html', Gharas_dresses=gharas_dresses)
+@app.route("/other_dresses")
+def other_dresses():
+    # Query the database to fetch dresses with type "Baraat"
+    other_dresses = LenderForm.query.filter_by(Dres_type="Other").all()
+    
+    # Iterate through each dress object to encode its image to base64
+    for dress in other_dresses:
+        dress.image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+    return render_template('other_dresses.html', Other_dresses=other_dresses)
+
+# dress details route
+@app.route("/dress_details/<int:dress_id>")
+def dress_details(dress_id):
+    # Query the database to fetch the dress with the given dress_id
+    dress = LenderForm.query.get(dress_id)
+
+    if not dress:
+        abort(404)  # Handle if dress_id does not exist
+
+    # Encode dress image to base64 if it exists
+    image_base64 = base64.b64encode(dress.image).decode('utf-8') if dress.image else None
+
+    return render_template("dress_details.html", dress=dress, image_base64=image_base64)
+
+
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
@@ -168,13 +285,13 @@ def contact():
         # Commit the changes to the database
         db.session.commit()
         
-        return redirect(url_for("thank_you"))
+        # return redirect(url_for("thank_you"))
+        flash('Thanks for your message')
+        return render_template("contact.html")
     else:
         return render_template("contact.html")
 
-@app.route("/thank_you")
-def thank_you():
-    return "<h1>Thank you for your message!</h1>"
+
 
 
 if __name__== "__main__":
