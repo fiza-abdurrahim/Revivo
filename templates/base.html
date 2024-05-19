@@ -97,6 +97,11 @@
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
+        {% if session['username'] %}
+        <button class="btn btn-primary mx-3"><a href="{{ url_for('logout') }}" class="text-decoration-none text-white">{{ session['username'] }}</a></button>
+        {% else %}
+        <button class="btn btn-primary mx-3"><a href="{{ url_for('login') }}" class="text-decoration-none text-white">Sign In</a></button>
+        {% endif %}  
       </div>
     </div>
   </nav>

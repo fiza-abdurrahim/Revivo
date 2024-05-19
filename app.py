@@ -2,8 +2,8 @@ import base64
 import datetime
 import hmac
 import hashlib
-
-from flask import Flask, render_template, request,redirect, url_for, flash, get_flashed_messages, abort
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask import Flask, render_template, request,redirect, url_for, flash, get_flashed_messages, abort, session
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
@@ -22,7 +22,9 @@ db = SQLAlchemy(app)
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(254), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+
 
 # model to create table in database
 class LenderForm(db.Model):
@@ -51,6 +53,56 @@ class Feedback(db.Model):
 @app.route("/")
 def index():
     return render_template('home.html')
+
+#login route
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            session['username'] = user.username
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid email or password', 'danger')
+    
+    return render_template('/auth/Login.html')
+
+
+# logout route
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('username', None)
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('home'))
+
+#Sign Up route
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+
+        # Check if user already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email address already exists', 'danger')
+            return redirect(url_for('signup'))
+
+        # Create new user
+        new_user = User(username=username, email=email, password=generate_password_hash(password, method='pbkdf2:sha256'))
+        db.session.add(new_user)
+        db.session.commit()
+        
+        # flash('Account created successfully', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('/auth/SignUp.html')
 
 # Payment route
 @app.route('/checkout')
@@ -111,7 +163,9 @@ def checkout():
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    username = session.get('username')
+    return render_template("home.html", username=username)
+
 
 @app.route("/renting_process")
 def renting_process():
